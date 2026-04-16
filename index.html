@@ -1,62 +1,441 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>SubdiGate</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+        <title>SubdiGate – Smart QR Visitor System</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
 
-    <!-- WELCOME / HOME PAGE -->
-    <div id="welcomeScreen" class="welcome-screen">
-        <div class="welcome-card">
+        <!-- WELCOME / LANDING PAGE -->
+        <div id="welcomeScreen" class="welcome-screen">
 
-            <div class="logo">
-                <img src="assets/Logo.png" alt="SubdiGate Logo">
+            <!-- NAV -->
+            <nav class="navbar">
+                <div class="nav-logo">
+                    <img src="assets/Logo.png" alt="SubdiGate" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <span class="logo-fallback" style="display:none">SubdiGate</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <button id="launchFrameBtn" class="nav-cta">View Demo →</button>
+                <button class="hamburger" id="hamburger" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </nav>
+
+            <!-- MOBILE MENU -->
+            <div class="mobile-menu" id="mobileMenu">
+                <a href="#features" onclick="closeMobileMenu()">Features</a>
+                <a href="#how-it-works" onclick="closeMobileMenu()">How It Works</a>
+                <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
+                <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+                <button id="launchFrameBtnMobile" class="nav-cta mobile-cta">View Demo →</button>
             </div>
 
-            <h1>Welcome to SubdiGate</h1>
-
-            <div class="description">
-                SubdiGate is a smart QR visitor system for fast, secure entry and real-time HOA monitoring, solving issues from manual logbooks like inaccurate records, security gaps, and operational delays while improving safety for homeowners, guards, and administrators.
+            <!-- HERO SECTION -->
+            <section class="hero" id="home">
+                <div class="hero-bg">
+                    <div class="hero-blob blob-1"></div>
+                    <div class="hero-blob blob-2"></div>
+                    <div class="hero-grid"></div>
+                </div>
+                <div class="hero-inner">
+                <div class="hero-content">
+                    <div class="hero-eyebrow">
+                        <span class="pulse-dot"></span>
+                        Smart QR Visitor Management · Wadhwani Entrepreneurship
+                    </div>
+                    <h1 class="hero-title">
+                        Secure Your Gate.<br>
+                        <span class="hero-highlight">Ditch the Logbook.</span>
+                    </h1>
+                    <p class="hero-sub">
+                        SubdiGate replaces slow, error-prone manual gate logs with a QR-based visitor system — giving HOAs, guards, and homeowners real-time visibility and airtight security.
+                    </p>
+                    <div class="hero-stat">
+                        <div class="stat-item">
+                            <span class="stat-num">62%</span>
+                            <span class="stat-label">of PH gated communities still use manual logs</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-num">93%</span>
+                            <span class="stat-label">Venture viability index score</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-num">8/10</span>
+                            <span class="stat-label">prototype testers loved the solution</span>
+                        </div>
+                    </div>
+                    <div class="hero-actions">
+                        <button id="launchFrameBtn2" class="btn-primary">
+                            <span class="btn-icon">▶</span> View Live Prototype
+                        </button>
+                        <a href="#features" class="btn-ghost">Explore Features ↓</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="phone-mockup">
+                        <div class="phone-frame">
+                            <div class="phone-screen">
+                                <div class="app-header">
+                                    <span class="app-logo-small">🏠 SubdiGate</span>
+                                    <span class="app-notif">🔔</span>
+                                </div>
+                                <div class="app-activity">
+                                    <div class="act-label">Recent Activities</div>
+                                    <div class="act-item act-anim" style="--d:0s">
+                                        <span class="act-dot green"></span>
+                                        <div>
+                                            <strong>Visitor – QR Code</strong>
+                                            <small>Car · NAB-2345 · 2:05 PM</small>
+                                        </div>
+                                    </div>
+                                    <div class="act-item act-anim" style="--d:0.3s">
+                                        <span class="act-dot blue"></span>
+                                        <div>
+                                            <strong>Delivery – Lazada</strong>
+                                            <small>Rider · 123-ABC · 11:40 AM</small>
+                                        </div>
+                                    </div>
+                                    <div class="act-item act-anim" style="--d:0.6s">
+                                        <span class="act-dot green"></span>
+                                        <div>
+                                            <strong>Visitor – QR Code</strong>
+                                            <small>Motorcycle · 309-JAF · 9:15 AM</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="app-nav-bar">
+                                    <span>📷<br><small>Scan</small></span>
+                                    <span>📋<br><small>Manual</small></span>
+                                    <span>👥<br><small>Residents</small></span>
+                                    <span>🚗<br><small>Visitors</small></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="qr-float">
+                            <div class="qr-inner">
+                                <div class="qr-grid"></div>
+                            </div>
+                            <span>Time-Bound QR Pass</span>
+                        </div>
+                    </div>
+                </div><!-- end hero-inner -->
+            </section>
+            <div class="uvp-band">
+                <div class="uvp-inner">
+                    <span class="uvp-icon">🔐</span>
+                    <p><strong>Our UVP:</strong> SubdiGate delivers secure digital services that protect residents' data while making gate management faster and more transparent than any manual alternative.</p>
+                </div>
             </div>
 
-            <div class="feature-badge">
-                <span class="badge">🔵 QR-Based Access</span>
-                <span class="badge">🟢 Real-time Monitoring</span>
-                <span class="badge">⚡ Fast & Efficient Entry</span>
-                <span class="badge">📋 Logbook Replacement</span>
-            </div>
+            <!-- FEATURES SECTION -->
+            <section class="features" id="features">
+                <div class="section-header">
+                    <div class="section-tag">Key Features</div>
+                    <h2>Everything you need at the gate</h2>
+                    <p>Purpose-built for Philippine HOAs — from small subdivisions to large gated communities.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feat-card feat-large">
+                        <div class="feat-icon-wrap blue-bg">📲</div>
+                        <h3>QR Visitor Pass</h3>
+                        <p>Residents pre-register guests and generate time-bound QR codes. No more waiting, no more manual logging — guards scan and the system does the rest.</p>
+                        <div class="feat-tag">Core Feature</div>
+                    </div>
+                    <div class="feat-card">
+                        <div class="feat-icon-wrap green-bg">📡</div>
+                        <h3>Real-Time Dashboard</h3>
+                        <p>HOA admins and homeowners see live gate activity from any device, any time.</p>
+                    </div>
+                    <div class="feat-card">
+                        <div class="feat-icon-wrap yellow-bg">📶</div>
+                        <h3>Offline Logging</h3>
+                        <p>Guard entries are saved locally and synced when connectivity is restored.</p>
+                    </div>
+                    <div class="feat-card">
+                        <div class="feat-icon-wrap red-bg">🔔</div>
+                        <h3>Instant Notifications</h3>
+                        <p>Homeowners are alerted the moment their visitor arrives at the gate.</p>
+                    </div>
+                    <div class="feat-card">
+                        <div class="feat-icon-wrap purple-bg">📁</div>
+                        <h3>Visitor History</h3>
+                        <p>Complete, searchable logs of all entries. No more lost logbooks.</p>
+                    </div>
+                    <div class="feat-card feat-cta-card">
+                        <h3 style="color: #fff;">Ready to see it live?</h3>
+                        <p style="color: #fff;">Explore the interactive prototype and see SubdiGate in action.</p>
+                        <button id="launchFrameBtn3" class="btn-primary btn-sm">Open Prototype →</button>
+                    </div>
+                </div>
+            </section>
 
-            <button id="launchFrameBtn" class="explore-btn">
-                <span>Enter</span>
-                <span class="arrow-icon">→</span>
-            </button>
+            <!-- HOW IT WORKS -->
+            <section class="how-it-works" id="how-it-works">
+                <div class="hiw-bg"></div>
+                <div class="section-header light">
+                    <div class="section-tag white-tag">How It Works</div>
+                    <h2>From invitation to entry in seconds</h2>
+                </div>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-num">01</div>
+                        <div class="step-content">
+                            <h3>Resident Pre-Registers</h3>
+                            <p>The homeowner logs into SubdiGate and registers their visitor — name, date, and purpose of visit.</p>
+                        </div>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-num">02</div>
+                        <div class="step-content">
+                            <h3>QR Code Generated</h3>
+                            <p>A secure, time-bound QR code is created and shared with the visitor via link or screenshot.</p>
+                        </div>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-num">03</div>
+                        <div class="step-content">
+                            <h3>Guard Scans at Gate</h3>
+                            <p>The guard scans the QR code, the system validates it instantly, and the visitor is logged automatically.</p>
+                        </div>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-num">04</div>
+                        <div class="step-content">
+                            <h3>Homeowner Notified</h3>
+                            <p>The resident receives a real-time notification — their visitor has arrived and been cleared for entry.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            <div class="demo-note">
-                SubdiGate · Wadhwani Entrepreneurship
-            </div>
+            <!-- BENEFITS -->
+            <section class="benefits" id="benefits">
+                <div class="section-header">
+                    <div class="section-tag">Who Benefits</div>
+                    <h2>Built for everyone at the gate</h2>
+                </div>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-avatar">🏡</div>
+                        <h3>Homeowners</h3>
+                        <ul>
+                            <li>Pre-register visitors from your phone</li>
+                            <li>Real-time arrival notifications</li>
+                            <li>Full access history at your fingertips</li>
+                            <li>Peace of mind — always</li>
+                        </ul>
+                    </div>
+                    <div class="benefit-card benefit-card-accent">
+                        <div class="benefit-avatar">👮</div>
+                        <h3>Security Guards</h3>
+                        <ul>
+                            <li>Scan QR instead of manual writing</li>
+                            <li>Faster processing during peak hours</li>
+                            <li>No more logbook errors or backlogs</li>
+                            <li>Offline mode when internet is spotty</li>
+                        </ul>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-avatar">🏢</div>
+                        <h3>HOA Admins</h3>
+                        <ul>
+                            <li>Real-time gate monitoring dashboard</li>
+                            <li>Accurate visitor analytics and reports</li>
+                            <li>Reduced liability from security gaps</li>
+                            <li>Scalable for any subdivision size</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PRICING -->
+            <section class="pricing" id="pricing">
+                <div class="section-header">
+                    <div class="section-tag">Pricing</div>
+                    <h2>Simple, affordable plans</h2>
+                    <p>Start free, upgrade when you're ready.</p>
+                </div>
+                <div class="pricing-grid">
+                    <div class="plan-card">
+                        <div class="plan-badge">Free</div>
+                        <div class="plan-price"><span class="plan-peso">₱</span>0<span class="plan-period">/7 days</span></div>
+                        <div class="plan-name">Trial</div>
+                        <ul class="plan-features">
+                            <li>✅ QR Visitor Pass</li>
+                            <li>✅ Resident List</li>
+                            <li>✅ Basic Visitor Log</li>
+                            <li>❌ Guard Scanning</li>
+                            <li>❌ Real-time Notifications</li>
+                        </ul>
+                        <a href="#contact" class="plan-btn plan-btn-ghost">Get Started Free</a>
+                    </div>
+                    <div class="plan-card plan-featured">
+                        <div class="plan-badge popular-badge">Most Popular</div>
+                        <div class="plan-price"><span class="plan-peso">₱</span>2,500<span class="plan-period">/month</span></div>
+                        <div class="plan-name">Standard</div>
+                        <ul class="plan-features">
+                            <li>✅ QR Visitor Pass</li>
+                            <li>✅ Resident List</li>
+                            <li>✅ Full Visitor Log</li>
+                            <li>✅ Guard Scanning</li>
+                            <li>❌ Real-time Notifications</li>
+                        </ul>
+                        <a href="#contact" class="plan-btn plan-btn-primary">Upgrade to Standard</a>
+                    </div>
+                    <div class="plan-card">
+                        <div class="plan-badge">Full Access</div>
+                        <div class="plan-price"><span class="plan-peso">₱</span>4,500<span class="plan-period">/month</span></div>
+                        <div class="plan-name">Premium</div>
+                        <ul class="plan-features">
+                            <li>✅ QR Visitor Pass</li>
+                            <li>✅ Resident List</li>
+                            <li>✅ Full Visitor Log</li>
+                            <li>✅ Guard Scanning</li>
+                            <li>✅ Real-time Notifications</li>
+                        </ul>
+                        <a href="#contact" class="plan-btn plan-btn-ghost">Upgrade to Premium</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DEMO CTA BANNER -->
+            <section class="demo-banner">
+                <div class="demo-banner-content">
+                    <h2>See SubdiGate in action</h2>
+                    <p>Explore the fully interactive prototype — no login required.</p>
+                    <button id="launchFrameBtn4" class="btn-primary btn-large">
+                        <span class="btn-icon">▶</span> Open Live Prototype
+                    </button>
+                </div>
+            </section>
+
+            <!-- CONTACT -->
+            <section class="contact" id="contact">
+                <div class="section-header">
+                    <div class="section-tag">Get In Touch</div>
+                    <h2>Let's talk about your subdivision</h2>
+                </div>
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <span class="contact-icon">📍</span>
+                            <div>
+                                <strong>Location</strong>
+                                <p>Pamantasan ng Cabuyao<br>City of Cabuyao, Laguna, Philippines</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">✉️</span>
+                            <div>
+                                <strong>Email</strong>
+                                <p>support@subdigate.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">💬</span>
+                            <div>
+                                <strong>Social</strong>
+                                <p>Facebook · SubdiGate Official</p>
+                            </div>
+                        </div>
+                        <div class="contact-team">
+                            <div class="section-tag" style="margin-bottom:0.8rem">The Team</div>
+                            <div class="team-member">
+                                <span class="team-avatar">J</span>
+                                <div><strong>Joaquin Aaron Recio, CEO</strong><br><small>BSIT – University of Cabuyao</small></div>
+                            </div>
+                            <div class="team-member">
+                                <span class="team-avatar">R</span>
+                                <div><strong>Russel Molinyawe, CTO</strong><br><small>BSIT – University of Cabuyao</small></div>
+                            </div>
+                            <div class="team-member">
+                                <span class="team-avatar">F</span>
+                                <div><strong>Francis Demonteverde, CFO</strong><br><small>BSIT – University of Cabuyao</small></div>
+                            </div>
+                            <div class="team-member">
+                                <span class="team-avatar">M</span>
+                                <div><strong>Markanthony Delatore, CMO/CGO</strong><br><small>BSIT – University of Cabuyao</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="contact-form" onsubmit="handleFormSubmit(event)">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" placeholder="Juan dela Cruz" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" placeholder="juan@subdivision.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Subdivision / HOA Name</label>
+                            <input type="text" placeholder="Greenpark Village HOA">
+                        </div>
+                        <div class="form-group">
+                            <label>Message</label>
+                            <textarea rows="4" placeholder="I'd like to learn more about SubdiGate for our community..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width:100%">Send Message →</button>
+                        <div id="formSuccess" class="form-success" style="display:none">
+                            ✅ Message sent! We'll get back to you soon.
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- FOOTER -->
+            <footer class="footer">
+                <div class="footer-inner">
+                    <div class="footer-logo">
+                        <img src="assets/Logo.png" alt="SubdiGate" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+                        <span style="display:none;font-weight:700;color:#fff">SubdiGate</span>
+                        <p>Smart QR Visitor Management for Philippine HOAs.</p>
+                    </div>
+                    <div class="footer-links">
+                        <a href="#features">Features</a>
+                        <a href="#how-it-works">How It Works</a>
+                        <a href="#pricing">Pricing</a>
+                        <a href="#contact">Contact</a>
+                    </div>
+                    <p class="footer-credit">SubdiGate · Wadhwani Entrepreneurship · University of Cabuyao · 2026</p>
+                </div>
+            </footer>
+
+        </div><!-- end welcomeScreen -->
+
+        <!-- FULLSCREEN IFRAME -->
+        <div id="figmaContainer" class="figma-container">
+            <iframe 
+                id="figmaIframe"
+                class="fullscreen-figma"
+                src="about:blank"
+                title="SubdiGate System"
+                frameborder="0"
+                scrolling="no">
+            </iframe>
         </div>
-    </div>
 
-    <!-- FULLSCREEN IFRAME -->
-    <div id="figmaContainer" class="figma-container">
-        <iframe 
-            id="figmaIframe"
-            class="fullscreen-figma"
-            src="about:blank"
-            title="SubdiGate System"
-            frameborder="0"
-            scrolling="no">
-        </iframe>
-    </div>
+        <!-- BACK BUTTON -->
+        <button id="backToHomeBtn" class="back-home-btn">
+            <span>⬅️</span> Back
+        </button>
 
-    <!-- BACK BUTTON -->
-    <button id="backToHomeBtn" class="back-home-btn">
-        <span>⬅️</span> Back
-    </button>
-
-    <script src="script.js"></script>
-</body>
+        <script src="script.js"></script>
+    </body>
 </html>

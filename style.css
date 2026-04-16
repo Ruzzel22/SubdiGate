@@ -1,0 +1,264 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* GLOBAL RESET & BASE */
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+}
+
+/* =========================
+   WELCOME SCREEN (UPDATED THEME ONLY)
+========================= */
+.welcome-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+
+    /* NEW WHITE + BLUE + GREEN THEME */
+    background-image: url("assets/Background Home.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    transition: opacity 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1), visibility 0.3s;
+    overflow: auto;
+}
+
+.welcome-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* =========================
+   CARD (UPDATED ONLY)
+========================= */
+.welcome-card {
+    max-width: 580px;
+    width: 88%;
+
+    background: rgba(255, 255, 255, 0.699);
+    backdrop-filter: blur(18px);
+
+    border-radius: 2rem;
+    padding: 0.8rem 1.5rem;
+    text-align: center;
+
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    border: 1px solid rgba(59,130,246,0.15);
+
+    transition: transform 0.3s ease;
+    animation: floatIn 0.6s ease-out;
+}
+
+@keyframes floatIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* =========================
+   LOGO (KEEP STRUCTURE)
+========================= */
+/* IMAGE LOGO SUPPORT */
+.logo img {
+    height: 100px;
+}
+
+
+/* =========================
+   HEADINGS
+========================= */
+h1 {
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin: 1.2rem 0 0.8rem;
+    color: #0f172a;
+}
+
+/* =========================
+   DESCRIPTION
+========================= */
+.description {
+    color: #334155;
+    line-height: 1.5;
+    margin: 1rem 0 1.8rem;
+    font-size: 1.05rem;
+}
+
+/* =========================
+   BADGES
+========================= */
+.feature-badge {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+
+    margin: 1.5rem 0 2rem;
+    justify-items: center;
+}
+
+.badge {
+    background: rgba(34, 197, 94, 0.12);
+    padding: 0.4rem 1rem;
+    border-radius: 40px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #166534;
+    border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+/* =========================
+   BUTTON
+========================= */
+.explore-btn {
+    background: linear-gradient(105deg, #2563eb, #22c55e);
+    border: none;
+    padding: 1rem 2.4rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 3rem;
+    color: white;
+    cursor: pointer;
+
+    box-shadow: 0 10px 25px rgba(34,197,94,0.25);
+    transition: all 0.25s ease;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.explore-btn:hover {
+    transform: scale(1.03);
+    background: linear-gradient(105deg, #1d4ed8, #16a34a);
+    box-shadow: 0 14px 30px rgba(34,197,94,0.35);
+}
+
+.explore-btn:active {
+    transform: scale(0.98);
+}
+
+.arrow-icon {
+    font-size: 1.3rem;
+    transition: transform 0.2s;
+}
+
+.explore-btn:hover .arrow-icon {
+    transform: translateX(5px);
+}
+
+/* =========================
+   NOTE
+========================= */
+.demo-note {
+    margin-top: 2rem;
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+/* =========================
+   IFRAME (UNCHANGED)
+========================= */
+.figma-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.2s, opacity 0.4s ease;
+    background: #000000;
+}
+
+.figma-container.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.fullscreen-figma {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    border: none;
+}
+
+/* =========================
+   BACK BUTTON (UNCHANGED)
+========================= */
+.back-home-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 30;
+
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 60px;
+    padding: 10px 20px;
+
+    font-size: 0.85rem;
+    color: white;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    opacity: 0;
+    visibility: hidden;
+}
+
+.back-home-btn.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.back-home-btn:hover {
+    background: rgba(34, 197, 94, 0.85);
+    transform: translateY(-2px);
+}
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 550px) {
+    .welcome-card {
+        padding: 1.8rem 1.2rem;
+    }
+
+    .logo {
+        font-size: 2.8rem;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    .explore-btn {
+        font-size: 1rem;
+        padding: 0.8rem 1.8rem;
+    }
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>SubdiGate</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- WELCOME / HOME PAGE -->
+    <div id="welcomeScreen" class="welcome-screen">
+        <div class="welcome-card">
+
+            <div class="logo">
+                <img src="assets/Logo.png" alt="SubdiGate Logo">
+            </div>
+
+            <h1>Welcome to SubdiGate</h1>
+
+            <div class="description">
+                SubdiGate is a smart QR visitor system for fast, secure entry and real-time HOA monitoring, solving issues from manual logbooks like inaccurate records, security gaps, and operational delays while improving safety for homeowners, guards, and administrators.
+            </div>
+
+            <div class="feature-badge">
+                <span class="badge">🔵 QR-Based Access</span>
+                <span class="badge">🟢 Real-time Monitoring</span>
+                <span class="badge">⚡ Fast & Efficient Entry</span>
+                <span class="badge">📋 Logbook Replacement</span>
+            </div>
+
+            <button id="launchFrameBtn" class="explore-btn">
+                <span>Enter System</span>
+                <span class="arrow-icon">→</span>
+            </button>
+
+            <div class="demo-note">
+                SubdiGate · Wadhwani Entrepreneurship
+            </div>
+        </div>
+    </div>
+
+    <!-- FULLSCREEN IFRAME -->
+    <div id="figmaContainer" class="figma-container">
+        <iframe 
+            id="figmaIframe"
+            class="fullscreen-figma"
+            src="about:blank"
+            title="SubdiGate System"
+            frameborder="0"
+            scrolling="no">
+        </iframe>
+    </div>
+
+    <!-- BACK BUTTON -->
+    <button id="backToHomeBtn" class="back-home-btn">
+        <span>🏠</span> Back to Home
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>

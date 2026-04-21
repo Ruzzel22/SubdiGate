@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>SubdiGate — Visitor & Resident Management System</title>
+  <!-- Google Fonts Inter & Font Awesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      transition: background 0.3s ease;
+      background-size: cover !important;
+      background-position: center !important;
+      background-attachment: fixed !important;
+      background-repeat: no-repeat !important;
+    }
+
+    /* Individual page backgrounds using assets */
+    body.dashboard-bg {
+      background: url('assets/Background - Dashboard.png') no-repeat center center fixed;
+      background-size: cover;
+    }
+    body.manual-bg {
+      background: url('assets/Background - Manual.png') no-repeat center center fixed;
+      background-size: cover;
+    }
+    body.scan-bg {
+      background: linear-gradient(135deg, #0a1a2f 0%, #0d2a3e 100%);
+    }
+    body.residents-bg {
+      background: linear-gradient(135deg, #e8f0f8 0%, #d4e2f0 100%);
+    }
+    body.visitors-bg {
+      background: linear-gradient(135deg, #f0f4f9 0%, #e3eaf1 100%);
+    }
+    body.request-bg {
+      background: linear-gradient(135deg, #eef2f7 0%, #e0e8f0 100%);
+    }
+    body.about-bg {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e8edf3 100%);
+    }
+
+    /* Overlay for readability on background images */
+    body.dashboard-bg::before,
+    body.manual-bg::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.88);
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .app-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px 24px 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header with Logo.png */
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 28px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      padding: 12px 28px;
+      border-radius: 60px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-img {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo-img img {
+      width: 100%;
+      height: auto;
+      max-height: 48px;
+      object-fit: contain;
+    }
+    .logo h1 {
+      font-size: 1.7rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1e3c72, #2b5a8c);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .global-search {
+      background: white;
+      border-radius: 60px;
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 300px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .global-search i { color: #7f8fa4; }
+    .global-search input {
+      border: none;
+      background: transparent;
+      width: 100%;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+    }
+    .global-search input::placeholder {
+      color: #b9c3d4;
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 8px 20px;
+      border-radius: 60px;
+      margin-bottom: 32px;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .nav-btn {
+      background: transparent;
+      border: none;
+      padding: 10px 22px;
+      font-weight: 600;
+      border-radius: 40px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      color: #2c3e5c;
+      transition: 0.2s;
+      font-size: 0.85rem;
+    }
+    .nav-btn i { margin-right: 8px; }
+    .nav-btn:hover {
+      background: rgba(30, 60, 114, 0.1);
+      transform: translateY(-1px);
+    }
+    .nav-btn.active {
+      background: #1e3c72;
+      color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .page-content {
+      display: none;
+      animation: fadeSlide 0.3s ease;
+    }
+    .page-content.active-page {
+      display: block;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(8px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+
+    /* Cards & UI Components */
+    .card {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(2px);
+      border-radius: 28px;
+      padding: 24px 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .card-header h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #1a2c3e;
+    }
+    .badge-link {
+      color: #2b5a8c;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .two-columns {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 28px;
+    }
+    @media (max-width: 880px) { 
+      .two-columns { grid-template-columns: 1fr; }
+    }
+
+    /* Tables */
+    .table-wrapper { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th { text-align: left; padding: 14px 8px 12px 0; color: #2c4c74; font-weight: 600; border-bottom: 2px solid #eef2f8; }
+    td { padding: 12px 8px 12px 0; border-bottom: 1px solid #f0f4fa; }
+    .status-badge {
+      background: #e0f2e9; color: #1f7840; padding: 4px 12px; border-radius: 40px; font-size: 0.7rem; font-weight: 700; display: inline-block;
+    }
+    .status-pending { background: #fff0db; color: #b45f06; }
+
+    /* Scanner Simulation Box */
+    .scanner-simulator {
+      background: linear-gradient(145deg, #0f212f, #071a24);
+      border-radius: 32px;
+      padding: 28px 20px;
+      text-align: center;
+      border: 2px solid #2dc9ff;
+      box-shadow: 0 0 0 4px rgba(45, 201, 255, 0.2), inset 0 0 30px rgba(0, 0, 0, 0.3);
+    }
+    .scan-area {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 28px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border: 2px dashed #3bc9ff;
+    }
+    .scan-frame {
+      background: rgba(7, 26, 36, 0.8);
+      border-radius: 24px;
+      padding: 36px 20px;
+      position: relative;
+    }
+    .scan-animation {
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #3bc9ff, transparent);
+      animation: scanMove 1.8s infinite ease-in-out;
+      margin: 20px 0;
+    }
+    @keyframes scanMove {
+      0% { width: 0%; opacity: 0.4; margin-left: 0; }
+      50% { width: 100%; opacity: 1; margin-left: 0; }
+      100% { width: 0%; opacity: 0.4; margin-left: 100%; }
+    }
+    .scan-icon-big {
+      font-size: 4rem;
+      color: #3bc9ff;
+      margin-bottom: 12px;
+    }
+    .btn-save {
+      background: #1e3c72;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 40px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: 0.2s;
+      font-size: 0.9rem;
+    }
+    .btn-save:hover { background: #0f2c4f; transform: scale(0.98); }
+
+    /* Sidebar cards */
+    .sidebar-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 28px;
+      padding: 22px;
+      margin-bottom: 24px;
+      border: 1px solid #eef2f8;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #2c6280; display: block; margin-bottom: 6px; letter-spacing: 0.5px; }
+    .form-group input, .form-group select { width: 100%; padding: 12px 14px; border-radius: 20px; border: 1px solid #e2e8f0; font-family: 'Inter', sans-serif; background: white; font-size: 0.85rem; }
+    .plan-card { background: #fafdff; border-radius: 20px; padding: 16px; margin-top: 12px; border: 1px solid #eef2fa; }
+    .log-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #edf2f7; align-items: center; }
+    .log-time { font-weight: 600; color: #2c4c74; font-size: 0.8rem; }
+    .flex-between { display: flex; justify-content: space-between; align-items: center; }
+    .upgrade-btn {
+      background: transparent;
+      border: 1px solid #1e3c72;
+      border-radius: 30px;
+      padding: 6px 12px;
+      font-weight: 600;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .upgrade-btn:hover {
+      background: #1e3c72;
+      color: white;
+    }
+    .footer-note { text-align: center; margin-top: 40px; font-size: 0.75rem; color: #5a6f8c; padding: 16px; }
+
+    /* Back to Home Button */
+    .back-to-home {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+      background: #1e3c72;
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .back-to-home:hover {
+      background: #0f2c4f;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+    .back-to-home i {
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body class="dashboard-bg">
+<div class="app-container">
+  <!-- Header with Logo.png from assets -->
+  <div class="main-header">
+    <div class="logo">
+      <div class="logo-img">
+        <img src="assets/Logo.png" alt="SubdiGate Logo" onerror="this.src='https://placehold.co/48x48/1e3c72/white?text=SG'">
+      </div>
+      <h1>SubdiGate</h1>
+    </div>
+    <div class="global-search">
+      <i class="fas fa-search"></i>
+      <input type="text" id="globalSearchInput" placeholder="Search Residents, Visitors, or Date...">
+    </div>
+  </div>
+
+  <!-- Navigation features -->
+  <div class="nav-tabs">
+    <button class="nav-btn active" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+    <button class="nav-btn" data-page="scan"><i class="fas fa-qrcode"></i> Scan</button>
+    <button class="nav-btn" data-page="manual"><i class="fas fa-pen-alt"></i> Manual</button>
+    <button class="nav-btn" data-page="residents"><i class="fas fa-users"></i> Residents</button>
+    <button class="nav-btn" data-page="visitors"><i class="fas fa-user-friends"></i> Visitors</button>
+    <button class="nav-btn" data-page="request"><i class="fas fa-clipboard-list"></i> Request</button>
+    <button class="nav-btn" data-page="about"><i class="fas fa-info-circle"></i> About</button>
+  </div>
+
+  <!-- ========= DASHBOARD PAGE ========= -->
+  <div id="dashboardPage" class="page-content active-page">
+    <div class="two-columns">
+      <div>
+        <div class="card">
+          <div class="card-header"><h2><i class="fas fa-history"></i> Recent Activities</h2><span class="badge-link">view all</span></div>
+          <div id="recentActivitiesList"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h2><i class="fas fa-home"></i> Residents Snapshot</h2><span class="badge-link" id="viewAllResidentsLink">full list →</span></div>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>ID</th><th>Full Name</th><th>House/Unit</th><th>Status</th></tr></thead>
+              <tbody id="dashResBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sidebar-card">
+          <h3><i class="fas fa-crown"></i> Subscription Plan</h3>
+          <div class="plan-card"><div class="flex-between"><b>Trial</b><span>7 days free</span></div><div>✓ QR Visitor Pass<br>✓ Resident List</div><button class="upgrade-btn" id="upgradeFromDash" style="margin-top:12px;">Upgrade</button></div>
+          <div class="plan-card"><div class="flex-between"><b>Standard</b><span>₱2,500/mo</span></div><div>✓ Analytics & Reports</div><button class="upgrade-btn" id="stdUpgradeBtn">Upgrade</button></div>
+        </div>
+        <div class="sidebar-card">
+          <h3><i class="fas fa-bell"></i> Quick Access</h3>
+          <button class="btn-save" id="quickScanBtn" style="margin-bottom:12px;"><i class="fas fa-camera"></i> Open Scan</button>
+          <button class="btn-save" id="quickManualBtn" style="background:#2c5a2e;"><i class="fas fa-edit"></i> Manual Entry</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= SCAN PAGE with scanner simulation box ========= -->
+  <div id="scanPage" class="page-content">
+    <div class="two-columns">
+      <div class="card" style="background: rgba(10, 25, 45, 0.92); backdrop-filter: blur(8px); border: 1px solid #2dc9ff;">
+        <h2 style="color: white;"><i class="fas fa-qrcode"></i> QR Scanner Simulation</h2>
+        <div class="scanner-simulator">
+          <div class="scan-area">
+            <div class="scan-frame">
+              <i class="fas fa-camera scan-icon-big"></i>
+              <div class="scan-animation"></div>
+              <p style="color: #bbf0ff; margin-top: 20px; font-size: 0.8rem;">Position QR code within frame</p>
+            </div>
+          </div>
+          <div class="form-group"><label style="color: #cce7ff;">QR Code ID</label><input type="text" id="scanQRId" value="GP-1054" readonly style="background: #eef3fc;"></div>
+          <div class="form-group"><label style="color: #cce7ff;">Requested by</label><input type="text" id="scanRequestedBy" value="Prelati, Francesca"></div>
+          <div class="form-group"><label style="color: #cce7ff;">Vehicle</label><input type="text" id="scanVehicle" value="Car (NAB-2345)"></div>
+          <button class="btn-save" id="confirmScanBtn"><i class="fas fa-check-circle"></i> Simulate Scan & Check-in</button>
+        </div>
+      </div>
+      <div class="sidebar-card"><h3>Last Scan Result</h3><div id="lastScanPreview" style="background: #eef2f9; padding: 12px; border-radius: 20px; text-align: center;">— waiting for scan —</div></div>
+    </div>
+  </div>
+
+  <!-- ========= MANUAL PAGE (uses Background - Manual.png from assets) ========= -->
+  <div id="manualPage" class="page-content">
+    <div class="two-columns">
+      <div class="card">
+        <h2><i class="fas fa-pen-alt"></i> Manual Entry Form</h2>
+        <div class="form-group"><label>Type</label><select id="manualType"><option>Visitor</option><option>Delivery</option></select></div>
+        <div class="form-group"><label>Requested by (Resident)</label><input id="manualResidentName" value="Prelati, Francesca"></div>
+        <div class="form-group"><label>QR Code ID / Pass</label><input id="manualQRCodeID" value="GP-1054"></div>
+        <div class="form-group"><label>Address</label><input id="manualAddressInput" value="Block 5, Lot 12, Green Meadows Subdivision"></div>
+        <div class="form-group"><label>Vehicle / Rider ID</label><input id="manualVehicleInput" value="Car (NAB-2345)"></div>
+        <div class="form-group"><label>Company (if Delivery)</label><input id="manualCompanyInput" placeholder="Shopee / Lazada"></div>
+        <div class="form-group"><label>Proof of Identity</label><input placeholder="ID number or reference"></div>
+        <button class="btn-save" id="saveManualEntryBtn"><i class="fas fa-save"></i> Register Manual Entry</button>
+      </div>
+      <div class="sidebar-card"><h3>Manual Entry Guide</h3><p>Fill in visitor/delivery details accurately. Entry will be logged in Recent Activities and Visitor Logs.</p><hr><p style="font-size: 0.7rem; margin-top: 12px;">All entries are time-stamped automatically.</p></div>
+    </div>
+  </div>
+
+  <!-- ========= RESIDENTS PAGE ========= -->
+  <div id="residentsPage" class="page-content">
+    <div class="card">
+      <div class="card-header"><h2><i class="fas fa-address-book"></i> Full Residents Directory</h2><input type="text" id="residentFilter" placeholder="Filter by name or house..." style="padding: 8px 14px; border-radius: 30px; border: 1px solid #ddd;"></div>
+      <div class="table-wrapper"><table id="residentsFullTable" width="100%"><thead><tr><th>ID</th><th>Full Name</th><th>House/Unit</th><th>Contact</th><th>Email</th><th>Status</th></tr></thead><tbody id="residentsFullBody"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ========= VISITORS PAGE ========= -->
+  <div id="visitorsPage" class="page-content">
+    <div class="card">
+      <div class="card-header"><h2><i class="fas fa-clock"></i> Visitor Logs & History</h2><input type="text" id="visitorLogFilter" placeholder="Search visitor/resident..." style="padding: 8px 14px; border-radius: 30px;"></div>
+      <div class="table-wrapper"><table id="visitorsTable" width="100%"><thead><tr><th>Visitor Name/ID</th><th>Visiting Resident</th><th>Date</th><th>Time In</th><th>Status</th></tr></thead><tbody id="visitorsLogBody"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ========= REQUEST PAGE ========= -->
+  <div id="requestPage" class="page-content">
+    <div class="card">
+      <h2><i class="fas fa-clipboard-list"></i> Access Requests (Residents)</h2>
+      <div class="table-wrapper"><table id="requestTable"><thead><tr><th>ID</th><th>Full Name</th><th>House/Unit</th><th>Contact</th><th>Status</th><th>Action</th></tr></thead><tbody id="requestTableBody"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ========= ABOUT PAGE ========= -->
+  <div id="aboutPage" class="page-content">
+    <div class="card" style="text-align: center;">
+      <h2><i class="fas fa-shield-alt"></i> About SubdiGate</h2>
+      <div class="logo-img" style="margin: 20px auto; width: 80px; height: 80px;"><img src="assets/Logo.png" alt="Logo" style="width:100%;" onerror="this.src='https://placehold.co/80x80/1e3c72/white?text=SG'"></div>
+      <p style="margin: 20px 0;">Secure subdivision gate management system. Manage residents, visitors, QR passes, and deliveries efficiently.</p>
+      <p><strong>Features:</strong> QR Scanning • Manual Entry • Resident Directory • Visitor Logs • Access Requests</p>
+      <p style="margin-top: 20px;">📞 Support: support@subdigate.com<br>© 2026 SubdiGate — All Rights Reserved</p>
+    </div>
+  </div>
+
+  <div class="footer-note">SubdiGate — Intelligent access control for modern subdivisions</div>
+</div>
+
+<!-- Back to Home Button -->
+<button class="back-to-home" id="backToHomeBtn">
+  <i class="fas fa-arrow-left"></i> Back
+</button>
+
+<script>
+  // ========== DATA MODELS (Separated functions) ==========
+  const residentsData = [
+    { id:"RES-01", name:"Juan M. Dela Cruz", house:"Block 1 Lot 5", contact:"0917-123-4567", email:"juandelacruz@email.com", status:"Approved" },
+    { id:"RES-02", name:"Maria L. Santos", house:"Block 2 Lot 3", contact:"0918-234-5678", email:"mariasantos@email.com", status:"Approved" },
+    { id:"RES-03", name:"Pedro A. Reyes", house:"Block 3 Lot 12", contact:"0919-345-6789", email:"pedroreyes@email.com", status:"Pending" },
+    { id:"RES-04", name:"Ana C. Lopez", house:"Block 4 Lot 8", contact:"0920-456-7890", email:"analopez@email.com", status:"Approved" },
+    { id:"RES-05", name:"Carlos B. Mendoza", house:"Block 5 Lot 2", contact:"0921-567-8901", email:"carlosmendoza@email.com", status:"Approved" },
+    { id:"RES-06", name:"Sofia D. Garcia", house:"Block 6 Lot 10", contact:"0922-678-9012", email:"sofiagarcia@email.com", status:"Pending" },
+    { id:"RES-07", name:"Mark T. Bautista", house:"Block 7 Lot 6", contact:"0923-789-0123", email:"markbautista@email.com", status:"Approved" },
+    { id:"RES-08", name:"Angela R. Cruz", house:"Block 8 Lot 9", contact:"0924-890-1234", email:"angelacruz@email.com", status:"Pending" },
+    { id:"RES-09", name:"Robert J. Flores", house:"Block 9 Lot 4", contact:"0925-901-2345", email:"robertflores@email.com", status:"Pending" },
+    { id:"RES-10", name:"Michelle P. Ramos", house:"Block 10 Lot 7", contact:"0926-012-3456", email:"michelleramos@email.com", status:"Approved" },
+    { id:"RES-11", name:"Daniel S. Navarro", house:"Block 11 Lot 1", contact:"0927-123-8901", email:"danielnavarro@email.com", status:"Approved" }
+  ];
+
+  let visitorLogs = [
+    { visitor:"QR Code (NAB-2345)", resident:"Juan M. Dela Cruz", date:"02/27/2026", time:"2:05 PM", status:"Checked In" },
+    { visitor:"Delivery Lazada (123-ABC)", resident:"Maria L. Santos", date:"02/27/2026", time:"11:40 AM", status:"Completed" },
+    { visitor:"QR Code (309-JAF)", resident:"Pedro A. Reyes", date:"02/27/2026", time:"9:15 AM", status:"Active" }
+  ];
+
+  let recentActivities = [
+    { datetime:"02/27/2026 • 2:05 PM", desc:"Visitor • QR Code • Car (NAB-2345)" },
+    { datetime:"02/27/2026 • 11:40 AM", desc:"Delivery • Lazada • Rider (123-ABC)" },
+    { datetime:"02/27/2026 • 9:15 AM", desc:"Visitor • QR Code • Motorcycle (309-JAF)" }
+  ];
+
+  // ========== RENDER FUNCTIONS (Separated) ==========
+  function renderRecentActivities() {
+    const container = document.getElementById('recentActivitiesList');
+    if(container) {
+      container.innerHTML = recentActivities.map(act => `
+        <div class="log-item">
+          <span class="log-time">${act.datetime}</span>
+          <span>${act.desc}</span>
+        </div>
+      `).join('');
+    }
+  }
+
+  function renderDashboardResidents() {
+    const tbody = document.getElementById('dashResBody');
+    if(tbody) {
+      tbody.innerHTML = residentsData.slice(0,5).map(r => `
+        <tr>
+          <td>${r.id}</td>
+          <td>${r.name}</td>
+          <td>${r.house}</td>
+          <td><span class="status-badge ${r.status === 'Pending' ? 'status-pending' : ''}">${r.status}</span></td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  function renderFullResidents(filter = "") {
+    const tbody = document.getElementById('residentsFullBody');
+    if(!tbody) return;
+    const filtered = residentsData.filter(r => 
+      r.name.toLowerCase().includes(filter) || 
+      r.house.toLowerCase().includes(filter) || 
+      r.id.toLowerCase().includes(filter)
+    );
+    tbody.innerHTML = filtered.map(r => `
+      <tr>
+        <td>${r.id}</td>
+        <td>${r.name}</td>
+        <td>${r.house}</td>
+        <td>${r.contact}</td>
+        <td>${r.email}</td>
+        <td><span class="status-badge ${r.status === 'Pending' ? 'status-pending' : ''}">${r.status}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  function renderVisitorLogs(filter = "") {
+    const tbody = document.getElementById('visitorsLogBody');
+    if(!tbody) return;
+    const filtered = visitorLogs.filter(v => 
+      v.visitor.toLowerCase().includes(filter) || 
+      v.resident.toLowerCase().includes(filter)
+    );
+    tbody.innerHTML = filtered.map(v => `
+      <tr>
+        <td>${v.visitor}</td>
+        <td>${v.resident}</td>
+        <td>${v.date}</td>
+        <td>${v.time}</td>
+        <td><span class="status-badge">${v.status}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  function renderRequestPage() {
+    const tbody = document.getElementById('requestTableBody');
+    if(tbody) {
+      tbody.innerHTML = residentsData.map(r => `
+        <tr>
+          <td>${r.id}</td>
+          <td>${r.name}</td>
+          <td>${r.house}</td>
+          <td>${r.contact}</td>
+          <td><span class="status-badge ${r.status === 'Pending' ? 'status-pending' : ''}">${r.status}</span></td>
+          <td><button class="upgrade-btn" data-id="${r.id}" style="padding:4px 12px;">${r.status === 'Pending' ? 'Approve' : 'View'}</button></td>
+        </tr>
+      `).join('');
+      
+      document.querySelectorAll('#requestTableBody button').forEach(btn => {
+        btn.addEventListener('click', () => alert("Demo: Approval workflow would update resident status."));
+      });
+    }
+  }
+
+  function addActivity(desc, visitorEntry = null) {
+    const newAct = { datetime: new Date().toLocaleString(), desc: desc };
+    recentActivities.unshift(newAct);
+    if(visitorEntry) visitorLogs.unshift(visitorEntry);
+    renderRecentActivities();
+    if(document.getElementById('visitorsPage').classList.contains('active-page')) {
+      renderVisitorLogs(document.getElementById('visitorLogFilter')?.value || "");
+    }
+  }
+
+  // ========== EVENT HANDLERS ==========
+  document.getElementById('confirmScanBtn')?.addEventListener('click', () => {
+    const qr = document.getElementById('scanQRId')?.value || "GP-1054";
+    const vehicle = document.getElementById('scanVehicle')?.value || "";
+    const reqBy = document.getElementById('scanRequestedBy')?.value || "Resident";
+    addActivity(`Scan QR • ${qr} • ${vehicle}`, {
+      visitor: `QR Scan (${qr})`,
+      resident: reqBy,
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(),
+      status: "Scanned"
+    });
+    const preview = document.getElementById('lastScanPreview');
+    if(preview) preview.innerHTML = `✅ Successfully scanned<br><strong>${qr}</strong><br>${new Date().toLocaleTimeString()}`;
+    alert(`✓ Scan simulated: ${qr} has been logged.`);
+  });
+
+  document.getElementById('saveManualEntryBtn')?.addEventListener('click', () => {
+    const type = document.getElementById('manualType').value;
+    const qr = document.getElementById('manualQRCodeID').value;
+    const vehicle = document.getElementById('manualVehicleInput').value;
+    const resident = document.getElementById('manualResidentName').value;
+    addActivity(`Manual ${type} • ${qr} • ${vehicle}`, {
+      visitor: `${type} (${qr})`,
+      resident: resident,
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(),
+      status: "Registered"
+    });
+    alert("✓ Manual entry has been added to Recent Activities & Visitor Logs.");
+  });
+
+  // ========== BACK TO HOME FUNCTION ==========
+  document.getElementById('backToHomeBtn')?.addEventListener('click', () => {
+    window.location.href = 'index.html';
+  });
+
+  // ========== PAGE NAVIGATION WITH BACKGROUND SWITCHING ==========
+  const bodyClassMap = {
+    dashboard: 'dashboard-bg',
+    scan: 'scan-bg',
+    manual: 'manual-bg',
+    residents: 'residents-bg',
+    visitors: 'visitors-bg',
+    request: 'request-bg',
+    about: 'about-bg'
+  };
+
+  function showPage(pageId) {
+    // Hide all pages
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active-page'));
+    // Show selected page
+    const targetPage = document.getElementById(`${pageId}Page`);
+    if(targetPage) targetPage.classList.add('active-page');
+    
+    // Update active nav button
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      if(btn.getAttribute('data-page') === pageId) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+    
+    // Apply background class to body
+    document.body.className = bodyClassMap[pageId] || 'dashboard-bg';
+    
+    // Re-render specific page data if needed
+    if(pageId === 'residents') renderFullResidents(document.getElementById('globalSearchInput')?.value.toLowerCase() || "");
+    if(pageId === 'visitors') renderVisitorLogs(document.getElementById('globalSearchInput')?.value.toLowerCase() || "");
+    if(pageId === 'request') renderRequestPage();
+    if(pageId === 'dashboard') { renderRecentActivities(); renderDashboardResidents(); }
+  }
+
+  // Attach navigation event listeners
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => showPage(btn.getAttribute('data-page')));
+  });
+  
+  document.getElementById('viewAllResidentsLink')?.addEventListener('click', () => showPage('residents'));
+  document.getElementById('quickScanBtn')?.addEventListener('click', () => showPage('scan'));
+  document.getElementById('quickManualBtn')?.addEventListener('click', () => showPage('manual'));
+  document.getElementById('upgradeFromDash')?.addEventListener('click', () => alert("Upgrade to Standard or Premium plan (demo)"));
+  document.getElementById('stdUpgradeBtn')?.addEventListener('click', () => alert("Upgrade to Standard: ₱2,500/month"));
+
+  // Global search functionality
+  const globalSearch = document.getElementById('globalSearchInput');
+  globalSearch.addEventListener('input', () => {
+    const term = globalSearch.value.toLowerCase();
+    if(document.getElementById('residentsPage').classList.contains('active-page')) {
+      renderFullResidents(term);
+    }
+    if(document.getElementById('visitorsPage').classList.contains('active-page')) {
+      renderVisitorLogs(term);
+    }
+  });
+
+  // Page-specific filters
+  document.getElementById('residentFilter')?.addEventListener('input', (e) => renderFullResidents(e.target.value));
+  document.getElementById('visitorLogFilter')?.addEventListener('input', (e) => renderVisitorLogs(e.target.value));
+
+  // ========== INITIAL RENDER ==========
+  renderRecentActivities();
+  renderDashboardResidents();
+  renderFullResidents("");
+  renderVisitorLogs("");
+  renderRequestPage();
+</script>
+</body>
+</html>
